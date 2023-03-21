@@ -20,13 +20,13 @@ export default function LoggedInNav() {
     >
         <Tabs.Screen
         options={{ headerShown: false }}
-        name='SelectNote'
-        component={SelectNote}
+        name='WebViewContainer'
+        component={WebviewContainer}
         />
         <Tabs.Screen
         options={{ headerShown: false }}
-        name='WebViewContainer'
-        component={WebviewContainer}
+        name='SelectNote'
+        component={SelectNote}
         />
     </Tabs.Navigator>
   );

@@ -19,9 +19,8 @@ const SelectNote: React.FC = ({navigation}:any) => {
       aspect: [4, 3],
       quality: 1,
     });
-    // console.log("result",result)
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      // setImageUri(result.assets[0].uri);
       navigation.navigate('WebViewContainer',{imageUri: result.assets[0].uri})
     }
   };
