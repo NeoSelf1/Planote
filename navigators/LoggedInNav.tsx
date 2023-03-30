@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import SelectNote from '../src/screens/SelectNote';
-import WebviewContainer from '../src/components/WebviewContainer';
+import WebviewContainer from '../src/screens/WebviewContainer';
+import ViewNote from '../src/screens/ViewNote';
 
 const Tabs = createBottomTabNavigator();
 
@@ -25,8 +24,8 @@ export default function LoggedInNav() {
         />
         <Tabs.Screen
         options={{ headerShown: false }}
-        name='SelectNote'
-        component={SelectNote}
+        name='ViewNote'
+        component={ViewNote}
         />
     </Tabs.Navigator>
   );

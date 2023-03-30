@@ -3,20 +3,22 @@ import { View, Text,Button,Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function WebviewContainer() {
+export default function WebviewContainer({navigation}) {
   const [selectedImage, setSelectedImage] = useState('');
+  const [loading, setLoading] = useState(0);
   const webviewRef = useRef()
   const selectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1000, 1414],
       quality: 1,
       base64:true
     });
 
     if (!result.canceled) {
       setSelectedImage('data:image/png;base64,'+ result.assets[0].base64);
+      setLoading(1)
     }
   };
   const source=/*html*/`
@@ -70,7 +72,6 @@ export default function WebviewContainer() {
             for (let i =0; i<myStaves.length; i++){
               if (i%5==4){
                 cv.rectangle(image,new cv.Point(0,(myStaves[i]+myStaves[i+1])/2-1),new cv.Point(image.cols,(myStaves[i]+myStaves[i+1])/2+1),new cv.Scalar(0, 0, 0),-1,cv.LINE_AA,0)//가리는거
-
               }
             }
             // console.log(myStaves)
@@ -321,6 +322,7 @@ export default function WebviewContainer() {
             const pitch = recognize_note(image, staff, stats, stems, direction,objects);
             if (pitch.length>0){
               for (let j =0; j<pitch.length;j++){
+                console.log(objects[i][objects[i].length-4])
                 object_2.push([objects[i][objects[i].length-4],pitch[j]])
               } 
             }
@@ -516,24 +518,25 @@ export default function WebviewContainer() {
       </script>
     </head> 
     <body>
-      <img id="img" crossorigin="anonymous" src='${selectedImage}' alt = 'test'/>
+      <img id="img" style="display:none" crossorigin="anonymous" src='${selectedImage}' alt = 'test'/>
+      <canvas style="display:none" id="result"/>
       <script type="text/javascript">
-        function onFunctionsReady(){
-          window.ReactNativeWebView.postMessage('functions ready');
-        }
         let img = document.getElementById('img');
         function onOpenCVReady(){
           cv['onRuntimeInitialized']=()=>{
             try {
+              let data=[]
               let image_1 = remove_noise(img)
               let image_2 =remove_line(image_1)
               let image_3= normalization(image_2.image,image_2.myStaves,10)
               let [image_4,objects_4]=object_detection(image_3.resizedImg,image_3.myStaves)
-              let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)        
-              window.ReactNativeWebView.postMessage(objects_5.toString());
-              window.ReactNativeWebView.postMessage('safe');
+              let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)  
+              //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: JSON.stringify(image_1.cols)}));
+              data.push([image_1.cols,image_1.rows],image_3.myStaves,objects_5)
+              window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
+              //cv.imshow('result', image_5);
             } catch(e){
-              window.ReactNativeWebView.postMessage(e.toString());
+              window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
             }
           }
         }
@@ -542,23 +545,37 @@ export default function WebviewContainer() {
   </html>
   `
 
+  const onMessage = (e)=> {
+    const { type, data } = JSON.parse(e.nativeEvent.data)
+    if(type ==="noteInfo"){
+      console.log("Information successully transfered to ViewNote")
+      navigation.navigate('ViewNote',{data,selectedImage})
+      setSelectedImage(false)
+      setLoading(2)
+    } else {
+      console.log(data)
+    }
+  }
   return (
-    <View style={{ flexDirection:'column',backgroundColor: 'black',flex:1, justifyContent:'center', alignItems: 'center',padding:40}}>
-      <Button title="Select Image" onPress={selectImage} />
-      {selectedImage && (
+    <View style={{ flexDirection:'column',backgroundColor: 'black',flex:1, justifyContent:'center', alignItems: 'center'}}>
+      {loading ===1 && (
+          <Text style={{color:'white',fontSize:24,marginTop:200}}>Loading</Text>
+        )
+      }
+      {selectedImage?(
+        <>
           <WebView
-            style={{
-              marginTop: 20,
-              width: 600,
-              height:'auto',
-              flex: 1
-            }}
+            style={{display:'none'}}
             ref={webviewRef}
             source={{html: source}} 
-            onMessage={(event) => console.log("HTML->webview:",event.nativeEvent.data)}
+            onMessage={onMessage}
             domStorageEnabled={true}
-          />)}
-        
+          />
+        </>
+        ):(
+        <Button title="Select Image" onPress={selectImage} />
+        ) 
+      }
     </View>
     )
   }

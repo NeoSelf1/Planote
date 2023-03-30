@@ -37,8 +37,8 @@
         let image_2 =remove_line(image_1)
         let image_3= normalization(image_2.image,image_2.myStaves,10)
         let [image_4,objects_4]=object_detection(image_3.resizedImg,image_3.myStaves)
-        let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)        
-        // window.ReactNativeWebView.postMessage(JSON.stringify({type: "data", data: objects_5}));
+        let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)      
+        console.log(objects_5)  
         cv.imshow('canvasOutput', image_5);
       };
       
@@ -51,6 +51,6 @@
       };
     </script>
     <script src="functions.js" type="text/javascript"></script>
-    <script async src="opencv.js" type="text/javascript"></script>
+    <script async src="https://docs.opencv.org/3.4/opencv.js"></script>
   </body>
 </html>
