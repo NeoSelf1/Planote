@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View,Image,Text } from 'react-native';
+import { ScrollView,View,Image,Text } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Dimensions } from 'react-native';
 import { colors } from '../../colors';
@@ -72,7 +72,7 @@ const ViewNote: React.FC = ({route:{params}}:any) => {
 
   ));//저는 똥쟁이입니다
   return (
-    <View style={{flex:1,width: '100%', height: 9999999, backgroundColor: 'black'}}>
+    <View style={{flex:1,width: '100%', height: NoteInfo[0][1], backgroundColor: 'black'}}>
       <Image style={{resizeMode:'contain',width:'100%',height:NoteInfo[0][1]*screenRatio,aspectRatio:0.70721}} source = {{uri: base64Note}}/>
       {textComponents}
     </View>
