@@ -74,7 +74,7 @@ export default function WebviewContainer({navigation}) {
                 cv.rectangle(image,new cv.Point(0,(myStaves[i]+myStaves[i+1])/2-1),new cv.Point(image.cols,(myStaves[i]+myStaves[i+1])/2+1),new cv.Scalar(0, 0, 0),-1,cv.LINE_AA,0)//가리는거
               }
             }
-            // console.log(myStaves)
+
             return {image,myStaves}
         }
 
@@ -532,7 +532,7 @@ export default function WebviewContainer({navigation}) {
               let [image_4,objects_4]=object_detection(image_3.resizedImg,image_3.myStaves)
               let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)  
               //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: JSON.stringify(image_1.cols)}));
-              data.push([image_1.cols,image_1.rows],image_3.myStaves,objects_5)
+              data.push([image_1.cols,image_1.rows],image_2.myStaves,objects_5)
               window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
               //cv.imshow('result', image_5);
             } catch(e){
