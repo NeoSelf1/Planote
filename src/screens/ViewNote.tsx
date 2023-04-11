@@ -32,11 +32,11 @@ const ViewNote: React.FC = ({route:{params}}:any) => {
   const screenRatio = (width*1.414)/NoteInfo[0][1];
   const blankBottom = height-(width*1.414);
   const base64Note= params.selectedImage;
-  
+
   const textComponents = NoteInfo[2].map((text:any) => (
     text.map((note:any, noteId:number)=> (
       <NoteText style={{
-        left:    (note[1][1]/NoteInfo[0][0])*width,
+        left:    (note[1][1]/NoteInfo[0][0])*width-6,
         bottom:  width*1.414 - NoteInfo[1][note[0]*5]*(width*1.414/height)
         }} key={noteId}> 
         {note[0]%2===1 ? 
