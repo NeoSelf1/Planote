@@ -1,6 +1,5 @@
 export default function OpenCVWeb(selectedImage) {
-
-return (  /*html*/`
+  return /*html*/ `
 <!DOCTYPE html>
 <html>
   <head>
@@ -194,14 +193,8 @@ return (  /*html*/`
           mask.delete();
           return masked_img
       }
-      // function recognize_note_tail(image,index,stem,direction){
-      //   let [x,y,w,h]=stem
-      //   if (direction=="true"){
 
-      //   }
-      // }
-
-      function stem_detection(image,stats,length){
+      function stem_detection(image,stats,length){//length=30
           const [x, y, w, h, area] = stats
           const stems=[]
           //column = x, row = y
@@ -498,7 +491,7 @@ return (  /*html*/`
   </head> 
   <body>
     <img id="img" style="display:none" crossorigin="anonymous" src='${selectedImage}' alt = 'test'/>
-    <canvas style="display:none" id="result"/>
+    <canvas id="result"/> 
     <script type="text/javascript">
       let img = document.getElementById('img');
       function onOpenCVReady(){
@@ -510,10 +503,10 @@ return (  /*html*/`
             let image_3= normalization(image_2.image,image_2.myStaves,10)
             let [image_4,objects_4]=object_detection(image_3.resizedImg,image_3.myStaves)
             let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)  
-            //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: JSON.stringify(image_1.cols)}));
-            data.push([image_1.cols,image_1.rows],image_2.myStaves,objects_5)
+            data.push([image_3.resizedImg.cols,image_3.resizedImg.rows],image_2.myStaves,objects_5)
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
-            //cv.imshow('result', image_5);
+            //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: JSON.stringify(image_1.cols)}));
+            cv.imshow('result',image_4)
           } catch(e){
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
           }
@@ -522,5 +515,5 @@ return (  /*html*/`
     </script>
   </body>
 </html>
-`)
+`;
 }
