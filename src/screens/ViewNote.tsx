@@ -16,12 +16,12 @@ width*(note[1][1]/NoteInfo[0][0])
 */
 
 const NoteText = styled(Text)`
-  color:   ${colors.green};
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
+  line-height: 14;
   position: absolute;
-  border-width:2px;
-  border-color:red;
+  /* border-width:2px;
+  border-color:red; */
   width:12px;
 `;
 
@@ -33,30 +33,42 @@ const ViewNote: React.FC = ({route:{params}}:any) => {
   const blankBottom = height-(width*1.414);
   const base64Note= params.selectedImage;
 
+  const noteText = (noteLine:number,notePitch:any,noteId:number)=>{
+    if (noteLine%2==0){
+      console.log(NoteInfo[1][noteLine*5]*(width*1.414/height))
+      return (
+        <NoteText style={{
+          left:    (notePitch[1]/NoteInfo[0][0])*width-6,
+          // bottom:  height-NoteInfo[1][noteLine*5]*(width*1.414/height)-blankBottom,
+          top:     NoteInfo[1][noteLine*5+4]*(width*1.414/height)+10,
+
+          color:   colors.green
+          }} 
+          key={noteId}> 
+          {notePitch[0].map((item:number)=> (
+            noteStringTop[(item+3)%7]
+          ))
+        }
+        </NoteText>
+        )
+    }else {
+      return (
+        <NoteText style={{
+          left:    (notePitch[1]/NoteInfo[0][0])*width-6,
+          top:     NoteInfo[1][noteLine*5+4]*(width*1.414/height)+28,
+          color:   colors.blue
+          }} key={noteId}> 
+          {notePitch[0].map((item:number)=> (
+            noteStringTop[(item+5)%7]
+          ))}
+        </NoteText>
+      )
+    }
+  }
   const textComponents = NoteInfo[2].map((text:any) => (
     text.map((note:any, noteId:number)=> (
-      <NoteText style={{
-        left:    (note[1][1]/NoteInfo[0][0])*width-6,
-        bottom:  width*1.414 - NoteInfo[1][note[0]*5]*(width*1.414/height)
-        }} key={noteId}> 
-        {note[0]%2===1 ? 
-        (note[1][0].map((item:number)=> (
-          noteStringTop[(item+5)%7]
-        ))):
-        (note[1][0].map((item:number)=> (
-          noteStringTop[(item+3)%7]
-        )))}
-      </NoteText> 
-    // <PitchText
-    //   myKey = {noteId}
-    //   text={noteString[note[1][0].toString()]}
-    //   x={note[1][1]}
-    //   y={note[0]*200+200}
-    //   >
-    // </PitchText>
-    )
-    )
-
+      noteText(note[0],note[1],noteId)
+    ))
   ));
   return (
     <View style={{flex:1,width: '100%', height: NoteInfo[0][1], backgroundColor: 'black'}}>

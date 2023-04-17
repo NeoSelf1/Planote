@@ -54,7 +54,7 @@ export default function Note({ navigation }: any) {
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         data={data?.seeNote?.notes}
-        keyExtractor={(photo) => photo.id}
+        keyExtractor={(note) => note.id}
         renderItem={renderNote}
       />
     </ScreenLayout>
