@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import ScreenLayout from '../components/ScreenLayout';
-// import Photo from '../components/Photo';
 
 const NOTE_QUERY = gql`
   query seeNote($offset: Int!) {
