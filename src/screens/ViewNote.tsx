@@ -14,7 +14,6 @@ NoteInfo[2]== 계이름들의 정보
 line=note[0], pitch = note[1][0], x좌표 = note[1][1]
 width*(note[1][1]/NoteInfo[0][0])
 */
-
 const NoteText = styled(Text)`
   font-weight: 700;
   text-align: center;

@@ -8,7 +8,8 @@ import ScreenLayout from '../components/ScreenLayout';
 const NOTE_QUERY = gql`
   query seeNote($offset: Int!) {
     seeNote(offset: $offset) {
-      feeds {
+      ok
+      notes {
         id
         title
         noteArray
@@ -19,6 +20,7 @@ const NOTE_QUERY = gql`
   }
 `;
 
+
 export default function Note({ navigation }: any) {
   // const [offset, setOffset] = useState(0);
   const { data, loading, refetch, fetchMore } = useQuery(NOTE_QUERY, {
@@ -28,7 +30,7 @@ export default function Note({ navigation }: any) {
   });
   console.log('data:', data);
   const renderNote = ({ item: note }: any) => {
-    return <View><Text>{note}</Text></View>;
+    return <View><Text style={{color:'black'}}>{note}</Text></View>;
   };
 
   const refresh = async () => {
@@ -51,7 +53,7 @@ export default function Note({ navigation }: any) {
         }
         refreshing={refreshing}
         onRefresh={refresh}
-        style={{ width: '100%' }}
+        style={{ width: '100%',backgroundColor:'white' }}
         showsVerticalScrollIndicator={false}
         data={data?.seeNote?.notes}
         keyExtractor={(note) => note.id}

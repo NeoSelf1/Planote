@@ -37,8 +37,7 @@ export default function WebviewContainer({navigation}) {
     <View style={{ flexDirection:'column',backgroundColor: 'black',flex:1, justifyContent:'center', alignItems: 'center'}}>
       {loading ===1 && (
           <Text style={{color:'white',fontSize:24,marginTop:200}}>Loading</Text>
-        )
-      }
+      )}
       {selectedImage?( //Temporary Change for Test
         <>
           <WebView
