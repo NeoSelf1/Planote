@@ -23,7 +23,7 @@ export default function LoggedInNav() {
         name='Note'
         component={Note}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
         options={{ headerShown: false }}
         name='WebViewContainer'
         component={WebviewContainer}
@@ -32,7 +32,7 @@ export default function LoggedInNav() {
         options={{ headerShown: false }}
         name='ViewNote'
         component={ViewNote}
-        />
+        /> */}
     </Tabs.Navigator>
   );
 }

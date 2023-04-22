@@ -9,8 +9,7 @@ import {
   
 //   export const isLoggedInVar = makeVar(false);
   export const tokenVar: any = makeVar('');
-  
-//   const TOKEN = 'token';
+  const TOKEN = 'token';
   
 //   export const logUserIn = async (token: any) => {
 //     await AsyncStorage.setItem(TOKEN, token);
@@ -19,17 +18,8 @@ import {
 //     tokenVar(token);
 //   };
   
-  const httpLink = createHttpLink({
-    uri: 'https://eb12-2001-e60-9147-9567-146c-d2bc-26d5-3536.ngrok-free.app/graphql',
-  });
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        token: tokenVar(),
-      },
-    };
-  });
+
+
   
 //   export const logUserOut = async () => {
 //     await AsyncStorage.removeItem(TOKEN);
@@ -67,10 +57,22 @@ import {
       },
     },
   });
-  
+  const httpLink = createHttpLink({
+    uri: 'https://planote-backend.herokuapp.com',
+    // uri: 'http://localhost:4000/graphql',
+  });
+  const authLink = setContext((_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        token: tokenVar(),
+      },
+    };
+  });
   const client = new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: httpLink,
     cache,
+
   });
   export default client;
   
