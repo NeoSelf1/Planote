@@ -42,7 +42,6 @@ export default function WebviewContainer({navigation}) {
         <>
           <WebView
             style={{display:'none'}}
-            // style={{backgroundColor:'white',width:700}}//Temporary Change for Test
             ref={webviewRef}
             source={{html: source}} 
             onMessage={onMessage}
