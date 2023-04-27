@@ -51,8 +51,7 @@ export default function Note({ navigation }: any) {
   };
 
   const createNote = () => {
-    console.log("createNote")
-    navigation.navigate('WebViewContainer')//Temporary Change for Test)
+    navigation.navigate('CreateNote_1')//Temporary Change for Test)
   }
   const refresh = async () => {
     setRefreshing(true);
