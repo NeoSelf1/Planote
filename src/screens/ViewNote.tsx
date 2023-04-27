@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Dimensions } from 'react-native';
 import { colors } from '../../colors';
 import styled from 'styled-components/native';
+import { gql, useMutation } from '@apollo/client';
 /*
 height : 화면 전체 높이 -> 진짜 찐도배기로 보이는 가로,세로
 NoteInfo[0][1]: 이미지 원본의 높이
@@ -23,15 +24,31 @@ const NoteText = styled(Text)`
   border-color:red; */
   width:12px;
 `;
-
+const CREATENOTE_MUTATION = gql`
+  mutation createNote($title: String!, $noteArray: String!) {
+    createNote(title: $title, noteArray: $noteArray) {
+      ok
+      error
+    }
+  }
+`;
 const ViewNote: React.FC = ({route:{params}}:any) => {
   const noteStringTop = ['도','레','미','파','솔','라','시'] //교수님 왜 저에게 이런걸 시키시는건가요
   const { width, height } = Dimensions.get('window');
   const NoteInfo = JSON.parse(params.data);
   const screenRatio = (width*1.414)/NoteInfo[0][1];
-  const blankBottom = height-(width*1.414);
   const base64Note= params.selectedImage;
 
+  // const onCompleted = async (data:any)=> {
+  //   const {
+  //     createNote: {ok,error}
+  //   } = data
+  //   if (ok){
+  //     await 
+  //   }
+  
+  // }
+  // const [createNoteMutation,{loading}]=useMutation(CREATENOTE_MUTATION,{onCompleted,})
   const noteText = (noteLine:number,notePitch:any,noteId:number)=>{
     if (noteLine%2==0){
       console.log(NoteInfo[1][noteLine*5]*(width*1.414/height))
@@ -73,6 +90,7 @@ const ViewNote: React.FC = ({route:{params}}:any) => {
     <View style={{flex:1,width: '100%', height: NoteInfo[0][1], backgroundColor: 'black'}}>
       <Image style={{resizeMode:'contain',width:'100%',height:NoteInfo[0][1]*screenRatio,aspectRatio:0.70721}} source = {{uri: base64Note}}/>
       {textComponents}
+      
     </View>
   );
 };
