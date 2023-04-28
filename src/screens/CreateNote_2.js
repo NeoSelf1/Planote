@@ -1,4 +1,6 @@
 import React, { useState,useRef } from 'react';
+import { Text, SafeAreaView } from 'react-native';
+
 import { WebView } from 'react-native-webview';
 import OpenCVWeb from '../components/HTML'
 import styled from 'styled-components/native';
@@ -23,12 +25,15 @@ export default function CreateNote_2({route}) {
   //   }
   // }
   return (
-    <WebView
-      style={{display:'none'}}
-      ref={webviewRef}
-      source={{html: source}} 
-      // onMessage={onMessage}
-      domStorageEnabled={true}
-    />
+    <SafeAreaView>
+      <Text>CreateNote_2</Text>
+      <WebView
+        style={{display:'none'}}
+        ref={webviewRef}
+        source={{html: source}} 
+        // onMessage={onMessage}
+        domStorageEnabled={true}
+      />
+    </SafeAreaView>
   )
   }

@@ -497,7 +497,6 @@ export default function OpenCVWeb(selectedImage) {
       function onOpenCVReady(){
         cv['onRuntimeInitialized']=()=>{
           try {
-            
             let data=[]
             let image_1 = remove_noise(img)
             let image_2 =remove_line(image_1)
