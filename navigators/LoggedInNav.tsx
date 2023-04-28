@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import WebviewContainer from '../src/screens/WebviewContainer';
+import CreateNote_2 from '../src/screens/CreateNote_2';
 import ViewNote from '../src/screens/ViewNote';
 import Note from '../src/screens/Note';
 import CreateNote_1 from '../src/screens/CreateNote_1';
@@ -31,8 +31,8 @@ export default function LoggedInNav() {
         />
         <Tabs.Screen
         options={{ headerShown: false }}
-        name='WebViewContainer'
-        component={WebviewContainer}
+        name='CreateNote_2'
+        component={CreateNote_2}
         />
         <Tabs.Screen
         options={{ headerShown: false }}

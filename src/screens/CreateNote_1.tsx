@@ -56,6 +56,9 @@ export default function CreateNote_1({navigation}:any) {
     setImgArray(newImages);
     console.log(imgArray.length);
   };
+  const navigateToNext=()=> {
+    navigation.navigate('CreateNote_2',{data: imgArray})
+  }
   return (
     <SafeAreaView style={{ flexDirection:'column',backgroundColor: 'white',padding:'4%',height:'100%'}}>
       <Title>이미지를 선택해주세요</Title>
@@ -92,7 +95,7 @@ export default function CreateNote_1({navigation}:any) {
               size={50}
             />
         </Button>
-        <Button onPress={navigation.navigate('CreateNote_2',{imgArray})}>
+        <Button onPress={navigateToNext}>
           <Ionicons
               name='chevron-forward-outline'
               color='white'
