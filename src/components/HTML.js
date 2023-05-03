@@ -1,7 +1,8 @@
-export default function OpenCVWeb(selectedImage) {
+import { useState } from "react"
+export default function OpenCVWeb(arr){
   return /*html*/ `
 <!DOCTYPE html>
-<html>
+<html>  
   <head>
   <script async src="https://docs.opencv.org/3.4/opencv.js" onload="onOpenCVReady();"></script>
     <script type="text/javascript">
@@ -490,24 +491,20 @@ export default function OpenCVWeb(selectedImage) {
     </script>
   </head> 
   <body>
-    <img id="img" style="display:none" crossorigin="anonymous" src='${selectedImage}' alt = 'test'/>
-    <canvas id="result"/> 
+    <div class='image-container'></div>
     <script type="text/javascript">
-      let img = document.getElementById('img');
       function onOpenCVReady(){
         cv['onRuntimeInitialized']=()=>{
           try {
-            let data=[]
-            let image_1 = remove_noise(img)
-            let image_2 =remove_line(image_1)
-            let image_3= normalization(image_2.image,image_2.myStaves,10)
-            let [image_4,objects_4]=object_detection(image_3.resizedImg,image_3.myStaves)
-            let [image_5,objects_5]=recognition(image_4,image_3.myStaves,objects_4)  
-            data.push([image_3.resizedImg.cols,image_3.resizedImg.rows],image_2.myStaves,objects_5)
-            window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
-            //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: JSON.stringify(image_1.cols)}));
-            cv.imshow('result',image_4)
-          } catch(e){
+            var container = document.querySelector('.image-container');
+            var myArr = ${arr};
+            //for(var i=0; i<myArr.length; i++){
+            var image = document.createElement('img');
+            image.src = ${arr.base64};
+            container.appendChild(image);
+            window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: 'hello'}));
+            //}
+          } catch(e){ 
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
           }
         }
@@ -515,5 +512,21 @@ export default function OpenCVWeb(selectedImage) {
     </script>
   </body>
 </html>
-`;
+`
+// return /*html*/`
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//   <meta charset="UTF-8" />
+//   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+//   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+//   <title>Document</title>
+// </head>
+// <body>
+//   <script>
+
+//   </script>
+// </body>
+// </html>
+// `
 }

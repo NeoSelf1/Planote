@@ -34,7 +34,6 @@ const Button = styled.TouchableOpacity`
 
 export default function CreateNote_1({navigation}:any) {
   const [imgArray, setImgArray] = useState<string[]>([]);
-  const webviewRef = useRef()
   const selectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -56,9 +55,11 @@ export default function CreateNote_1({navigation}:any) {
     setImgArray(newImages);
     console.log(imgArray.length);
   };
+  
   const navigateToNext=()=> {
     navigation.navigate('CreateNote_2',{data: imgArray})
   }
+
   return (
     <SafeAreaView style={{ flexDirection:'column',backgroundColor: 'white',padding:'4%',height:'100%'}}>
       <Title>이미지를 선택해주세요</Title>
