@@ -15,10 +15,10 @@ export default function CreateNote_2({route}) {
     notes.id = (i + 1);
     notesArray.push({...notes});
   } 
-  console.log(notesArray.length)
+  //console.log(notesArray.length)
   const source = OpenCVWeb(notesArray)
-  
-  const onMessage = (e)=> {
+   
+  const onMessage = (e)=> {  
     const { type, data } = JSON.parse(e.nativeEvent.data) 
     if(type ==="noteInfo"){
       console.log("Information successully transfered to ViewNote")
@@ -33,10 +33,10 @@ export default function CreateNote_2({route}) {
   } 
   return ( 
     <SafeAreaView style={{width:'100%',height:'100%'}}>
-      <Text>CreateNote_2</Text> 
+      <Text>CreateNote_2</Text>  
       <WebView 
-        // style={{backgroundColor:'black'}}  
-        ref={webviewRef}
+        style={{width:"120%",height:"120%"}} 
+        ref={webviewRef} 
         source={{html: source}} 
         onMessage={onMessage}
         domStorageEnabled={true}

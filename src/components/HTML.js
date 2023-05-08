@@ -1,5 +1,6 @@
 import { useState } from "react"
 export default function OpenCVWeb(arr){
+  let [myArr,setMyArr]=useState(arr)
   return /*html*/ `
 <!DOCTYPE html>
 <html>  
@@ -491,19 +492,21 @@ export default function OpenCVWeb(arr){
     </script>
   </head> 
   <body>
-    <div class='image-container'></div>
+    <div id='image-container' style="background-color: black; width:1200px; height:1200px;">
+    </div>
     <script type="text/javascript">
       function onOpenCVReady(){
         cv['onRuntimeInitialized']=()=>{
           try {
-            var container = document.querySelector('.image-container');
-            var myArr = ${arr};
-            //for(var i=0; i<myArr.length; i++){
-            var image = document.createElement('img');
-            image.src = ${arr.base64};
-            container.appendChild(image);
-            window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: 'hello'}));
-            //}
+            var container = document.getElementById('image-container');
+            for(var i=0; i<${arr.length}; i++){
+              var image = document.createElement('img');
+              image.src = "${myArr[0].base64}";
+              container.appendChild(image);
+              window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: ${arr[0].id}}));
+            }
+            window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: ${myArr[0].id}}));
+            
           } catch(e){ 
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
           }
