@@ -8,14 +8,14 @@ export default function CreateNote_2({route}) {
   const webviewRef = useRef();
   console.log("1.route.params.data.length==",route.params.data.length)
 
-  var notes = {};
+  //var notes = {};
   var notesArray=[];
   for (let i=0; i<route.params.data.length; i++){
-    notes.base64 = route.params.data[i]
-    notes.id = (i + 1);
-    notesArray.push({...notes});
+    // notes.base64 = route.params.data[i]
+    // notes.id = (i + 1);
+    notesArray.push(route.params.data[i]);
   } 
-  //console.log(notesArray.length)
+  console.log(notesArray.length)
   const source = OpenCVWeb(notesArray)
    
   const onMessage = (e)=> {  

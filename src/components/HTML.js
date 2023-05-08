@@ -1,6 +1,5 @@
 import { useState } from "react"
 export default function OpenCVWeb(arr){
-  let [myArr,setMyArr]=useState(arr)
   return /*html*/ `
 <!DOCTYPE html>
 <html>  
@@ -501,12 +500,11 @@ export default function OpenCVWeb(arr){
             var container = document.getElementById('image-container');
             for(var i=0; i<${arr.length}; i++){
               var image = document.createElement('img');
-              image.src = "${myArr[0].base64}";
-              container.appendChild(image);
-              window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: ${arr[0].id}}));
+              image.src = "${arr["0"]}"; 
+              //이거 분명 0 자리에 다른 숫자 넣어도 해당 어레이에 접근이 가능하다! 이를 통해 변수를 넣는 시도가 필요
+              //image.src = ${arr}; //삽질들
+              container.appendChild(image); 
             }
-            window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: ${myArr[0].id}}));
-            
           } catch(e){ 
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
           }
@@ -515,7 +513,7 @@ export default function OpenCVWeb(arr){
     </script>
   </body>
 </html>
-`
+`//window.ReactNativeWebView.postMessage(JSON.stringify({type: "d", data: ${test[test1]}}));
 // return /*html*/`
 // <!DOCTYPE html>
 // <html lang="en">
