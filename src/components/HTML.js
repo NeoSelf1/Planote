@@ -439,7 +439,6 @@ export default function OpenCVWeb(arr){
                 cv.rectangle(image,new cv.Point(area_left,area_top),new cv.Point(area_right,area_bot),new cv.Scalar(125,0,0),1,cv.LINE_AA,0)//neo-가상선
                 fullCnt_l=0
               }
-              
               fullCnt_l++
             } else {
               fullCnt_l=0
@@ -482,7 +481,8 @@ export default function OpenCVWeb(arr){
             // head_center +=row
           }
         }
-        cv.rectangle(image,new cv.Point(x_stem,y_stem-noteHalf),new cv.Point(x_stem,y_stem+h_stem+noteHalf),new cv.Scalar(255, 255, 255),1,cv.LINE_AA,0)//neo-줄기위치
+        cv.rectangle(image,new cv.Point(x_stem,y_stem-noteHalf),new cv.Point(x_stem,y_stem+h_stem+noteHalf),new cv.Scalar(255, 255, 255),1,cv.LINE_AA,0);
+        //neo-줄기위치
         //줄기의 최하단 좌표를 기준, 계이름들을 분리하는 가상선을 그려준 후에, recognize_notehead를 변형하여 다수의 음표 pitch를 fetch
         let head_exist = (cnt>=4 && pixel_cnt>=55)
         let head_fill = (cnt>= 9 && cnt_max>=10 && pixel_cnt>=90)
@@ -498,11 +498,14 @@ export default function OpenCVWeb(arr){
         cv['onRuntimeInitialized']=()=>{
           try {
             var container = document.getElementById('image-container');
-            for(var i=0; i<${arr.length}; i++){
+            for(var j=0; j<${arr.length}; j++){
               var image = document.createElement('img');
-              image.src = "${arr["0"]}"; 
+              image.src = '${arr['0']}';
+              //var myString = 'image.src = arr['+j+']'
+              //var myString = 'image.src ='+ \$+'\{'+'arr['+j+']}';
+              //eval(myString); //삽질들
+              //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: myString}));
               //이거 분명 0 자리에 다른 숫자 넣어도 해당 어레이에 접근이 가능하다! 이를 통해 변수를 넣는 시도가 필요
-              //image.src = ${arr}; //삽질들
               container.appendChild(image); 
             }
           } catch(e){ 
@@ -525,7 +528,6 @@ export default function OpenCVWeb(arr){
 // </head>
 // <body>
 //   <script>
-
 //   </script>
 // </body>
 // </html>
