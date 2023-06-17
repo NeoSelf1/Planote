@@ -9,8 +9,6 @@ import client, { cache } from './apollo';
 import AppLoading from 'expo-app-loading';
 import { Ionicons } from '@expo/vector-icons';
 
-
-
 export default function App() {
   const [loading, setLoading] = useState(true);
   const onFinish = () => {

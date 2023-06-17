@@ -1,16 +1,19 @@
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView } from 'react-native';
+import { colors } from '../../colors';
 
 export default function ScreenLayout({ loading, children }: any) {
   return (
-    <View
+    <SafeAreaView
       style={{
-        backgroundColor: 'black',
+        flexDirection:'column',
+        backgroundColor: 'white',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding:'4%',
+        height:'50%',
+        justifyContent:'flex-start',
       }}
     >
-      {loading ? <ActivityIndicator color='white' /> : children}
-    </View>
+      {loading ? <ActivityIndicator size="large" color={colors.green} style={{marginTop:'80%'}} />: children}
+    </SafeAreaView>
   );
 }
