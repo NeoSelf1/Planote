@@ -45,7 +45,7 @@ const XButton = styled.TouchableOpacity`
 
 export default function Note({ navigation }: any) {
   const { data, loading, refetch } = useQuery(NOTE_QUERY, {
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
     variables: { 
       offset: 0,
     },
@@ -77,8 +77,8 @@ export default function Note({ navigation }: any) {
       id: myId
     }})
   }
-  const movingToNoteview=(noteArr:string,imgArr:string)=>{
-    navigation.navigate('ViewNote',{noteArr,imgArr});
+  const movingToNoteview = (noteArr:string,imgArr:string)=>{
+    navigation.navigate('ViewNote0617',{noteArr,imgArr});
   }
   
   const renderNote = ({ item:note }: any) => {

@@ -479,12 +479,14 @@ export default function OpenCVWeb(selectedImage) {
       function onOpenCVReady(){
         cv['onRuntimeInitialized']=()=>{
           try {
+            let data= []
             let image_1 = remove_noise(img)
             let [image_2,staves]=remove_line(image_1);
             let [resizedImg,resizedStaves]= normalization(image_2,staves,10);
             let [image_4,stems,head_h,lineArea]=object_detection(resizedImg,resizedStaves);//줄기검출까지만!
             let [image_5,pitches]=recognition(image_4,stems,head_h,resizedStaves);//머리 인식 + 음정 계산
-            window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(pitches)}));
+            data.push([resizedImg.cols,resizedImg.rows],lineArea,pitches);
+            window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
           } catch(e){
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
             //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e}));

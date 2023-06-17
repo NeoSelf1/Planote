@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CreateNote_2 from '../src/screens/CreateNote_2';
-import ViewNote from '../src/screens/ViewNote';
+// import ViewNote from '../src/screens/ViewNote';
 import Note from '../src/screens/Note';
-import CreateNote_1 from '../src/screens/CreateNote_1';
+import ViewNote0617 from '../src/screens/ViewNote0617';
 import CreateNoteNav from './CreateNoteNav';
 
 const stack = createNativeStackNavigator();
@@ -21,8 +20,8 @@ export default function LoggedInNav() {
         />
         <stack.Screen
         options={{ headerShown: false }}
-        name='ViewNote'
-        component={ViewNote}
+        name='ViewNote0617'
+        component={ViewNote0617}
         />
         <stack.Screen
         options={{ headerShown: false }}

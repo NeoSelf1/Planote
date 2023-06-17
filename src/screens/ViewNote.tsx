@@ -1,8 +1,10 @@
-import React from 'react';
-import {View,Image,Text } from 'react-native';
+import React,{useState} from 'react';
+import {View,Image,Text, SafeAreaView } from 'react-native';
 import { Dimensions } from 'react-native';
 import { colors } from '../../colors';
 import styled from 'styled-components/native';
+import * as ImageManipulator from 'expo-image-manipulator';
+
 /*
 height : 화면 전체 높이 -> 진짜 찐도배기로 보이는 가로,세로
 NoteInfo[0][1]: 이미지 원본의 높이
@@ -25,10 +27,37 @@ const NoteText = styled(Text)`
 const ViewNote = ({route}:any) => {
   const noteStringTop = ['도','레','미','파','솔','라','시'] //교수님 왜 저에게 이런걸 시키시는건가요
   const { width, height } = Dimensions.get('window');
-  const NoteInfo = JSON.parse(route.params.noteArr);
-  const screenRatio = (width*1.414)/NoteInfo[0][1];
-  const base64Note= route.params.imgArr;
 
+  let noteArray= JSON.parse(route.params.noteArr)
+  let lineArea = noteArray[0]
+  let pitches = noteArray[1]
+
+  const base64Note= route.params.imgArr;
+  console.log("base64Note = ",base64Note)
+  // async function cropImage(base64:string,top:number,bot:number) {
+  //   const croppedImage = await ImageManipulator.manipulateAsync(
+  //     base64,
+  //     [
+  //       {
+  //         crop: {
+  //           originX: 0,
+  //           originY: top,
+  //           width: width,
+  //           height: bot-top,
+  //         },
+  //       },
+  //     ],
+  //     { compress: 1, format: ImageManipulator.SaveFormat.PNG, base64: true }
+  //   );
+  //   return croppedImage.base64;
+
+  //   return `data:image/png;base64,${croppedImage.base64}`;
+  // }
+  // const croppedImage = await cropImage(base64Note,lineArea[0][0],lineArea[0][1]);
+  // console.log(croppedImage)
+  // setImage(croppedImage);
+
+  // const screenRatio = (width*1.414)/NoteInfo[0][1];
   // const noteText = (noteLine:number,notePitch:any,noteId:number)=>{
   //   if (noteLine%2==0){
   //     console.log(NoteInfo[1][noteLine*5]*(width*1.414/height))
@@ -66,10 +95,15 @@ const ViewNote = ({route}:any) => {
   //   ))
   // ));
   return (
-    <View style={{flex:1,width: '100%', height: NoteInfo[0][1], backgroundColor: 'white'}}>
-      <Image style={{resizeMode:'contain',width:'100%',height:NoteInfo[0][1]*screenRatio,aspectRatio:0.70721}} source = {{uri: base64Note}}/>
-      {/* {textComponents} */}
-    </View>
+    <SafeAreaViewBase>
+    <Text>Hi</Text>
+    {/* <Image source={{ uri: base64Note }}/> */}
+
+    </SafeAreaViewBase>
+    // <View style={{flex:1,width: '100%', height: NoteInfo[0][1], backgroundColor: 'white'}}>
+    //   <Image style={{resizeMode:'contain',width:'100%',height:NoteInfo[0][1]*screenRatio,aspectRatio:0.70721}} source = {{uri: base64Note}}/>
+    //   {/* {textComponents} */}
+    // </View>
   );
 };
 
