@@ -33,6 +33,7 @@ export default function CreateNote_2({navigation,route}:any) {
       console.log("1. 계이름 인식 과정 성공 -> 2.createNote 실행, noteName==",route.params.noteName)
       console.log("noteArr",noteArr)
       setText('악보 생성중');
+      //여기에 croppedImg 어레이 생성
       createNote({variables:{
         title:route.params.noteName,
         noteArray:noteArr,
