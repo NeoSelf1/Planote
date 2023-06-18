@@ -54,7 +54,8 @@ export default function CreateNote_2({navigation,route}:any) {
     var croppedImgs:any[]=[];
     for (let i =0; i<lineArea.length; i++){
       let croppedImg = await cropImage(base64,lineArea[i][0]/ratio,lineArea[i][1]/ratio,noteOriginW,noteOriginH)
-      croppedImgs=[...croppedImgs,croppedImg];
+      let height= lineArea[i][1]/ratio - lineArea[i][0]/ratio
+      croppedImgs=[...croppedImgs,[croppedImg,height]];
     }
     return JSON.stringify(croppedImgs)
   }

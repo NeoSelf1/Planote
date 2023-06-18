@@ -489,7 +489,6 @@ export default function OpenCVWeb(selectedImage) {
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
           } catch(e){
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
-            //window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e}));
           }
         }
       }
