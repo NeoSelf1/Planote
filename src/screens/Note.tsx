@@ -77,8 +77,8 @@ export default function Note({ navigation }: any) {
       id: myId
     }})
   }
-  const movingToNoteview = (noteArr:string,imgArr:string)=>{
-    navigation.navigate('ViewNote0617',{noteArr,imgArr});
+  const movingToNoteview = (noteArr:string,imgArr:string,title:string)=>{
+    navigation.navigate('ViewNote0617',{noteArr,imgArr,title});
   }
   
   const renderNote = ({ item:note }: any) => {
@@ -93,7 +93,7 @@ export default function Note({ navigation }: any) {
       alignItems: 'center',
       borderRadius: 16
       }}
-      onPress={()=>movingToNoteview(note.noteArray,note.imgArray)}
+      onPress={()=>movingToNoteview(note.noteArray,note.imgArray,note.title)}
       >
       <Text style={{color:'#282828',fontSize:22}}>
         {note.title}
