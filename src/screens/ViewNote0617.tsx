@@ -3,7 +3,7 @@ import { SafeAreaView,Text,Dimensions, Image,View } from 'react-native';
 import styled from 'styled-components/native';
 
 const Title = styled(Text)`
-  font-weight: 700;
+  font-weight: 900;
   text-align: center;
   font-size: 54px;
   background-color: white;
