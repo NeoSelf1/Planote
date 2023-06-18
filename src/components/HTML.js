@@ -430,6 +430,7 @@ export default function OpenCVWeb(selectedImage) {
             }
             //줄기당 계이름머리가 존재할 경우에만, line당 계이름 배열에 추가
             if(pitchesPerStem.length!=0){
+              pitchesPerStem.sort(function compareNum(a,b){return b-a})
               pitchesPerLine.push([col,pitchesPerStem]);
             }
           }
@@ -452,12 +453,12 @@ export default function OpenCVWeb(selectedImage) {
       } 
 
       function recognize_pitch(image,staff,head_center){
-        let pitch_lines= Array.from({length:21},(_,i)=> [staff[4]+weighted(30)-weighted(5)*i])
+        let pitch_lines= Array.from({length:29},(_,i)=> [staff[4]+weighted(50)-weighted(5)*i])
         let distance=image.cols;
         let finalI;
         for (let i =0; i<pitch_lines.length; i++){
           let line= pitch_lines[i];
-          // cv.rectangle(image, new cv.Point(10,parseInt(line)),new cv.Point(image.cols,parseInt(line)), new cv.Scalar(255, 255, 255), 0.5,cv.LINE_AA,0)//neo2
+          //cv.line(image,new cv.Point(10,parseInt(line)),new cv.Point(image.cols,parseInt(line)),new cv.Scalar(125, 125, 125),1);
           //line 높이도 적절하게 측정되었음
           //각 오선 라인의 y좌표값
           let newDist= Math.abs(line-head_center);

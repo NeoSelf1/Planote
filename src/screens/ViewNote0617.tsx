@@ -37,7 +37,7 @@ const ViewNote0617 =  ({route}:any) => {
         <Text style={{
           textAlign: "center",
           position:'absolute',
-          lineHeight: 14,
+          lineHeight: 16,
           top:4,
           width:12,  
           left:    (pitches[i][j][0]/noteOriginW)*width-6,
@@ -45,7 +45,7 @@ const ViewNote0617 =  ({route}:any) => {
           }} 
           key={`${i}_${j}`}> 
           {pitches[i][j][1].map((item:number)=> (
-            i%2==0? noteStringTop[(item+3)%7]:noteStringTop[(item+5)%7]
+            i%2==0? noteStringTop[(item+6)%7]:noteStringTop[(item+1)%7]
           ))
           }
         </Text>
@@ -53,7 +53,7 @@ const ViewNote0617 =  ({route}:any) => {
       );
     }
     pitchTextArr.push(
-      <View style={{height:maxLen*14,backgroundColor: i%2==0? 'white':'#E7E7E7'}}>
+      <View style={{height:maxLen*16,backgroundColor: i%2==0? 'white':'#E7E7E7'}}>
       {pitchTextArrPerLine}
       </View>
       )
