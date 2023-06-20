@@ -4,28 +4,10 @@ import {
     InMemoryCache,
     makeVar,
   } from '@apollo/client';
-//   import AsyncStorage from '@react-native-async-storage/async-storage';
   import { setContext } from '@apollo/client/link/context';
   
-//   export const isLoggedInVar = makeVar(false);
   export const tokenVar: any = makeVar('');
   const TOKEN = 'token';
-  
-//   export const logUserIn = async (token: any) => {
-//     await AsyncStorage.setItem(TOKEN, token);
-//     isLoggedInVar(true);
-//     //token 기록을 안하고 로그인을 진행할 경우, authlink에서 먹힘
-//     tokenVar(token);
-//   };
-  
-
-
-  
-//   export const logUserOut = async () => {
-//     await AsyncStorage.removeItem(TOKEN);
-//     isLoggedInVar(false);
-//     tokenVar(null);
-//   };
   
   export const cache = new InMemoryCache({
     typePolicies: {
@@ -59,7 +41,6 @@ import {
   });
   const httpLink = createHttpLink({
     uri: 'https://planote-backend.herokuapp.com',
-    // uri: 'http://localhost:4000/graphql',
   });
   const authLink = setContext((_, { headers }) => {
     return {
@@ -71,7 +52,7 @@ import {
   });
   const client = new ApolloClient({
     link: httpLink,
-    cache,
+    cache:new InMemoryCache(),
 
   });
   export default client;

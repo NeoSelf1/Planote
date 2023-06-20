@@ -1,9 +1,11 @@
 import React,{useState} from 'react';
 import { SafeAreaView,Text,Dimensions, Image,View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
+import { Button } from './CreateNote_1';
 
-const Title = styled(Text)`
-  font-weight: 900;
+const Title = styled.Text`
+  font-weight: 600;
   text-align: center;
   font-size: 54px;
   background-color: white;
@@ -15,6 +17,7 @@ const ViewNote0617 =  ({route}:any) => {
   let noteArray= JSON.parse(route.params.noteArr)  
   let imgArray= JSON.parse(route.params.imgArr)  
   let title= route.params.title
+  let [pitchFilter,setPitchFilter]=useState(false);
   const noteStringTop = ['도','레','미','파','솔','라','시'] //교수님 왜 저에게 이런걸 시키시는건가요
   let [noteOriginW,noteOriginH] = noteArray[0]
   const { width, height } = Dimensions.get('window');
@@ -30,30 +33,33 @@ const ViewNote0617 =  ({route}:any) => {
     for(let j=0; j<pitches[i].length; j++){
       //pitches[i][j][0] == 줄기 x좌표
       //pitches[i][j][1] == 계이름 어레이
-      if(maxLen<pitches[i][j][1].length){
-        maxLen=pitches[i][j][1].length;
+    let pitchTextArrPerStem = pitches[i][j][1];
+      if(pitchFilter){
+        pitchTextArrPerStem=pitchTextArrPerStem.filter((item:number)=>(item<=9 ||20<=item))
+      }
+      if(maxLen<pitchTextArrPerStem.length){
+        maxLen=pitchTextArrPerStem.length;
       }
       pitchTextArrPerLine.push([
         <Text style={{
           textAlign: "center",
           position:'absolute',
           lineHeight: 16,
-          top:4,
+          top:2,
           width:12,  
           left:    (pitches[i][j][0]/noteOriginW)*width-6,
           color:'black'
           }} 
           key={`${i}_${j}`}> 
-          {pitches[i][j][1].map((item:number)=> (
+          {pitchTextArrPerStem.map((item:number)=> (
             i%2==0? noteStringTop[(item+6)%7]:noteStringTop[(item+1)%7]
-          ))
-          }
+          ))}
         </Text>
         ]
       );
     }
     pitchTextArr.push(
-      <View style={{height:maxLen*16,backgroundColor: i%2==0? 'white':'#E7E7E7'}}>
+      <View style={{height:maxLen*17,backgroundColor: i%2==0? 'white':'#E7E7E7'}}>
       {pitchTextArrPerLine}
       </View>
       )
@@ -87,8 +93,13 @@ const ViewNote0617 =  ({route}:any) => {
 
     return (
     <SafeAreaView>
+      <ScrollView> 
       <Title>{title}</Title>
       <Note/>
+      </ScrollView>
+      <Button style={{backgroundColor:"#e2e2e2",position:'absolute',top:'4%',right:'4%'}} onPress={()=>setPitchFilter(!pitchFilter)}>
+        <Text style={{color:'#727272'}}>필터모드</Text>
+      </Button>
     </SafeAreaView>
   )
 }

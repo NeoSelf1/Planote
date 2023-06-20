@@ -60,12 +60,16 @@ export default function CreateNote_2({navigation,route}:any) {
     return JSON.stringify(croppedImgs)
   }
 
+  let croppedImgArr:string;
+
+  let noteArr:string;
   const onMessage = async (e:any)=> {  
-    const { type, data : noteArr } = JSON.parse(e.nativeEvent.data);
+    const { type, data } = JSON.parse(e.nativeEvent.data);
+    noteArr=data;
     if(type ==="noteInfo"){
       console.log("1. 계이름 인식 과정 성공 -> 2.createNote 실행, noteName==",route.params.noteName)
       setText('악보 생성중');
-      let croppedImgArr= await createCroppedArr(noteArr,imgsArray[0])     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
+      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0])     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
       createNote({variables:{
         title:route.params.noteName,
         noteArray:noteArr,
@@ -92,6 +96,35 @@ export default function CreateNote_2({navigation,route}:any) {
   };
 
   const [createNote] = useMutation(CREATENOTE_MUTATION, {
+    update(cache, { data: { createNote } }) {
+      if (createNote.ok) {
+        const newNote = {
+          id: createNote.id, // Assign a unique local ID or use the server-generated ID if available
+          title: route.params.noteName,
+          noteArray: noteArr,
+          imgArray: croppedImgArr
+        };
+        cache.modify({
+          fields: {
+            notes(existingNotes = []) {
+              const newNoteRef = cache.writeFragment({
+                data: newNote,
+                fragment: gql`
+                  fragment NewNote on Note {
+                    id
+                    title
+                    noteArray
+                    imgArray
+                  }
+                `,
+              });
+              return [...existingNotes, newNoteRef];
+            },
+          },
+        });
+        console.log(cache)
+      }
+    },
     onCompleted,
     onError: (e:any)=> {
       console.log(JSON.stringify(e, null, 2));
