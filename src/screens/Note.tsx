@@ -43,6 +43,11 @@ const XButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
+const NoteTitle = styled.Text`
+  color:'#282828';
+  font-size:22px;
+`;
+
 export default function Note({ navigation }: any) {
   const { data, loading, refetch } = useQuery(NOTE_QUERY, {
     // fetchPolicy: 'network-only',
@@ -95,9 +100,9 @@ export default function Note({ navigation }: any) {
       }}
       onPress={()=>movingToNoteview(note.noteArray,note.imgArray,note.title)}
       >
-      <Text style={{color:'#282828',fontSize:22}}>
+      <NoteTitle>
         {note.title}
-      </Text>
+      </NoteTitle>
       <XButton onPress={( )=>_delete(note.id)}> 
         <Ionicons
               name='close-outline'

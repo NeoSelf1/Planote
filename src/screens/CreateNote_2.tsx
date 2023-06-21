@@ -6,7 +6,8 @@ import styled from 'styled-components/native';
 import { colors } from '../../colors';
 import { gql, useMutation } from '@apollo/client';
 import { TouchableOpacity } from 'react-native';
-import * as ImageManipulator from 'expo-image-manipulator';
+import { createCroppedArr } from '../components/ImageCrop';
+import { WebViewNativeEvent } from 'react-native-webview/lib/WebViewTypes';
 
 const _SafeAreaView = styled.SafeAreaView`
 flex: 1;
@@ -24,52 +25,20 @@ const CREATENOTE_MUTATION = gql`
 `;
 
 export default function CreateNote_2({navigation,route}:any) { 
-
   let [text,setText]= useState('악보 데이터 추출중')
   let [done, setDone] = useState<Boolean>(false)
   const { width, height } = Dimensions.get('window');
 
-  async function cropImage(base64:string,top:number,bot:number,noteOriginW:number,noteOriginH:number) {
-    const croppedImage = await ImageManipulator.manipulateAsync(
-      base64,
-      [
-        {
-          crop: {
-            originX: 0,
-            originY: top,
-            width: height/(noteOriginH/noteOriginW), //윈도우 높이에 따라 이미지 너비는 변경될 것. 추후 추가연구 필요
-            height: bot-top,
-          }
-        },
-      ],
-      { compress: 1, format: ImageManipulator.SaveFormat.PNG, base64: true }
-    );
-    return croppedImage.uri
-  }  
-  const createCroppedArr= async (noteArr:string,base64:string)=>{
-    let noteArray= JSON.parse(noteArr)  
-    let [noteOriginW,noteOriginH] = noteArray[0]  
-    let lineArea = noteArray[1]  
-    const ratio =  noteOriginW /( height/(noteOriginH/noteOriginW))//추후 추가연구 필요
-    var croppedImgs:any[]=[];
-    for (let i =0; i<lineArea.length; i++){
-      let croppedImg = await cropImage(base64,lineArea[i][0]/ratio,lineArea[i][1]/ratio,noteOriginW,noteOriginH)
-      let height= lineArea[i][1]/ratio - lineArea[i][0]/ratio
-      croppedImgs=[...croppedImgs,[croppedImg,height]];
-    }
-    return JSON.stringify(croppedImgs)
-  }
-
   let croppedImgArr:string;
-
   let noteArr:string;
+
   const onMessage = async (e:any)=> {  
     const { type, data } = JSON.parse(e.nativeEvent.data);
     noteArr=data;
     if(type ==="noteInfo"){
       console.log("1. 계이름 인식 과정 성공 -> 2.createNote 실행, noteName==",route.params.noteName)
       setText('악보 생성중');
-      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0])     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
+      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0],height)     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
       createNote({variables:{
         title:route.params.noteName,
         noteArray:noteArr,
