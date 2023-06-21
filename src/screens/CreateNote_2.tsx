@@ -38,7 +38,7 @@ export default function CreateNote_2({navigation,route}:any) {
     if(type ==="noteInfo"){
       console.log("1. 계이름 인식 과정 성공 -> 2.createNote 실행, noteName==",route.params.noteName)
       setText('악보 생성중');
-      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0],height)     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
+      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0],height,width)     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
       createNote({variables:{
         title:route.params.noteName,
         noteArray:noteArr,
