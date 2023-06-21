@@ -25,8 +25,8 @@ const Input = ({ innerRef, ...data }: any) => {
 
 const DeleteButton= styled.TouchableOpacity`
 position: absolute;
-top: -6;
-right: -6;
+top: -6px;
+right: -6px;
 `
 
 export const Button = styled.TouchableOpacity`

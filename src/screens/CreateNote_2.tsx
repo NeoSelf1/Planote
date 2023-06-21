@@ -29,7 +29,7 @@ export default function CreateNote_2({navigation,route}:any) {
   let [done, setDone] = useState<Boolean>(false)
   const { width, height } = Dimensions.get('window');
 
-  let croppedImgArr:string;
+  let croppedImgArr:any;
   let noteArr:string;
 
   const onMessage = async (e:any)=> {  
@@ -42,7 +42,7 @@ export default function CreateNote_2({navigation,route}:any) {
       createNote({variables:{
         title:route.params.noteName,
         noteArray:noteArr,
-        imgArray:croppedImgArr
+        imgArray:JSON.stringify(croppedImgArr)
       }});
     } else if (type === "debug"){  
       console.log("2. inside HTMLasdf==",noteArr)
@@ -91,7 +91,7 @@ export default function CreateNote_2({navigation,route}:any) {
             },
           },
         });
-        console.log(cache)
+        // console.log(cache)
       }
     },
     onCompleted,
