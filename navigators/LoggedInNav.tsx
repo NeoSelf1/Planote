@@ -13,6 +13,7 @@ export default function LoggedInNav() {
         headerShown: false
       }}
     >
+      
         <stack.Screen
         options={{ headerShown: false }}
         name='Note'

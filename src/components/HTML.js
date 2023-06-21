@@ -1,4 +1,4 @@
-export default function OpenCVWeb(selectedImage) {
+export default function OpenCVWeb() {
   return /*html*/ `
 <!DOCTYPE html>
 <html>
@@ -469,31 +469,34 @@ export default function OpenCVWeb(selectedImage) {
         }
         return finalI
       }
-
     </script>
+    
   </head> 
   <body>
-    <img id="img" style="display:none" crossorigin="anonymous" src='${selectedImage[0]}' alt = 'test'/>
-    <canvas id="result"/> 
+    <div id="image-container"><div/>
     <script type="text/javascript">
-      let img = document.getElementById('img');
-      function onOpenCVReady(){
-        cv['onRuntimeInitialized']=()=>{
-          try {
+      function ExtractNoteData(base64,id){
+        const imgElement = document.createElement('img');
+        const imageContainer = document.getElementById('image-container');
+        imgElement.src = base64;
+        imageContainer.appendChild(imgElement);
+        imgElement.onload= function(){
             let data= []
-            let image_1 = remove_noise(img)
+            let image_1 = remove_noise(imgElement)
             let [image_2,staves]=remove_line(image_1);
             let [resizedImg,resizedStaves]= normalization(image_2,staves,10);
             let [image_4,stems,head_h,lineArea]=object_detection(resizedImg,resizedStaves);//줄기검출까지만!
             let [image_5,pitches]=recognition(image_4,stems,head_h,resizedStaves);//머리 인식 + 음정 계산
-            data.push([resizedImg.cols,resizedImg.rows],lineArea,pitches);
+            data.push([resizedImg.cols,resizedImg.rows],lineArea,pitches,id);
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
-          } catch(e){
-            window.ReactNativeWebView.postMessage(JSON.stringify({type: "debug", data: e.toString()}));
-          }
         }
       }
-    </script>
+    function onOpenCVReady(){
+      cv['onRuntimeInitialized']=()=>{
+        window.ReactNativeWebView.postMessage(JSON.stringify({type: "OnOpenCVReady", data: ""}));
+      }
+    }
+  </script>
   </body>
 </html>
 `;
