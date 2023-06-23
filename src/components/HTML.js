@@ -427,8 +427,7 @@ export default function OpenCVWeb() {
                 if (isHead>0){
                   isHead--;
                 }
-            }
-            //줄기당 계이름머리가 존재할 경우에만, line당 계이름 배열에 추가
+            }   //줄기당 계이름머리가 존재할 경우에만, line당 계이름 배열에 추가
             if(pitchesPerStem.length!=0){
               pitchesPerStem.sort(function compareNum(a,b){return b-a})
               pitchesPerLine.push([col,pitchesPerStem]);
@@ -483,10 +482,10 @@ export default function OpenCVWeb() {
         imgElement.onload= function(){
             let data= []
             let image_1 = remove_noise(imgElement)
-            let [image_2,staves]=remove_line(image_1);
-            let [resizedImg,resizedStaves]= normalization(image_2,staves,10);
-            let [image_4,stems,head_h,lineArea]=object_detection(resizedImg,resizedStaves);//줄기검출까지만!
-            let [image_5,pitches]=recognition(image_4,stems,head_h,resizedStaves);//머리 인식 + 음정 계산
+            let [image_2,staves] = remove_line(image_1);
+            let [resizedImg,resizedStaves] = normalization(image_2,staves,10);
+            let [image_4,stems,head_h,lineArea] = object_detection(resizedImg,resizedStaves);//줄기검출까지만!
+            let [image_5,pitches] = recognition(image_4,stems,head_h,resizedStaves);//머리 인식 + 음정 계산
             data.push([resizedImg.cols,resizedImg.rows],lineArea,pitches,id);
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
           }

@@ -58,7 +58,7 @@ export default function CreateNote_2({navigation,route}:any) {
       croppedImgs= await createCroppedArr(data,imgsArray[myId],height,width);
       croppedImgsArr.push(...croppedImgs);//string 반환
       //spread 연산자 ...를 push 대상으로 하면, 최종적으로 모든 원소들이 같은 배열 내 같은 위계에 놓이게 됨.
-            noteDatasArr.push([noteData[0][0],noteData[2]]);
+      noteDatasArr.push([noteData[0][0],noteData[2]]);
       //
       InsertImgsToWebview(myId+1);  
     } else {  
