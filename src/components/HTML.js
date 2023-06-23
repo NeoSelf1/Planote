@@ -489,7 +489,7 @@ export default function OpenCVWeb() {
             let [image_5,pitches]=recognition(image_4,stems,head_h,resizedStaves);//머리 인식 + 음정 계산
             data.push([resizedImg.cols,resizedImg.rows],lineArea,pitches,id);
             window.ReactNativeWebView.postMessage(JSON.stringify({type: "noteInfo", data: JSON.stringify(data)}));
-        }
+          }
       }
     function onOpenCVReady(){
       cv['onRuntimeInitialized']=()=>{

@@ -7,11 +7,12 @@ import { colors } from '../../colors';
 import { gql, useMutation } from '@apollo/client';
 import { TouchableOpacity } from 'react-native';
 import { createCroppedArr } from '../components/ImageCrop';
+
 const _SafeAreaView = styled.SafeAreaView`
 position: absolute;
 top: 500px;
-left: 0;
-right: 0;
+left: 0px;
+right: 0px;
 align-items: center;
 `;
 
@@ -25,7 +26,7 @@ const CREATENOTE_MUTATION = gql`
 `;
 
 let croppedImgsArr:string[]=[];
-let noteDatasArr:string[]=[];
+let noteDatasArr:string[][]=[];
 
 export default function CreateNote_2({navigation,route}:any) { 
   let [text,setText]= useState('악보 데이터 추출중')
@@ -36,28 +37,32 @@ export default function CreateNote_2({navigation,route}:any) {
   for (let i=0; i<route.params.imgsArray.length; i++){ // notes.base64 = route.params.data[i] // notes.id = (i + 1);
     imgsArray.push(route.params.imgsArray[i]);
   }
+  console.log("test");
 
   let croppedImgs:any;
 
   const onMessage = async (e:any)=> {  
     const { type, data } = JSON.parse(e.nativeEvent.data);
     //처음 시작은 당연히 0번째 이미지를 계산해야하기에 인자로 0을 삽입
+    
     if (type === "OnOpenCVReady"){  
       InsertImgsToWebview(0);
     }else if(type ==="noteInfo"){
-      let myId= JSON.parse(data)[3]//parse 한번 더 해야하나?
-      console.log(myId,typeof(myId))
+      let noteData = JSON.parse(data)
+      let myId= noteData[3]
+      // console.log("myId:",myId,"noteData:",noteData)
+      // console.log("typeof(myId):",typeof(myId),"typeof(noteData):",typeof(noteData))
       console.log(myId+1,"번째 페이지의 계이름 인식 과정 성공",)
       // //데이터 축적과정
-      croppedImgs=await createCroppedArr(data,imgsArray[myId],height)
-      console.log('before',croppedImgsArr.length)
-      croppedImgsArr.push(croppedImgs)//string 반환
-      console.log('after',croppedImgsArr.length)
-      noteDatasArr.push(JSON.parse(data))
+      //image.uri : string을 보관하고 있는 array
+      croppedImgs= await createCroppedArr(data,imgsArray[myId],height,width);
+      croppedImgsArr.push(...croppedImgs);//string 반환
+      //spread 연산자 ...를 push 대상으로 하면, 최종적으로 모든 원소들이 같은 배열 내 같은 위계에 놓이게 됨.
+            noteDatasArr.push([noteData[0][0],noteData[2]]);
       //
-      InsertImgsToWebview(myId+1);
+      InsertImgsToWebview(myId+1);  
     } else {  
-      console.log("ERROR in onMessage / inside HTML==",data)
+      console.log("ERROR in onMessage / inside HTML==",data);
     }
   }
   const InsertImgsToWebview = async (id:number)=> {//마지막은 3
@@ -65,9 +70,8 @@ export default function CreateNote_2({navigation,route}:any) {
       webviewRef.current.injectJavaScript(`ExtractNoteData("${imgsArray[id]}",${id});`);
       setText((id+1)+'번째 악보 계산 중');
     } else if (id>=imgsArray.length){ //모든 이미지에 대한 Data 계산이 완료한 경우
-      console.log("모든 악보의 계산이 완료되었습니다")
+      console.log("모든 악보의 계산이 완료되었습니다");
       setText('계산한 악보 저장 중');
-      console.log(noteDatasArr.length,croppedImgsArr.length);
       createNote({variables:{
         title:route.params.noteName,
         noteArray:JSON.stringify(noteDatasArr),
@@ -130,14 +134,12 @@ export default function CreateNote_2({navigation,route}:any) {
   const navigateHome =()=> {
     navigation.navigate('Note');
   }
-  const source = OpenCVWeb();
-
   return ( 
     <>
       <WebView 
         style={{opacity:0}} 
         ref={webviewRef} 
-        source={{html: source}} 
+        source={{html: OpenCVWeb()}} 
         onMessage={onMessage}
         domStorageEnabled={true}
       />
