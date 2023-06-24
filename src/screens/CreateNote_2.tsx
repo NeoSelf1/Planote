@@ -7,11 +7,12 @@ import { colors } from '../../colors';
 import { gql, useMutation } from '@apollo/client';
 import { TouchableOpacity } from 'react-native';
 import { createCroppedArr } from '../components/ImageCrop';
-import { WebViewNativeEvent } from 'react-native-webview/lib/WebViewTypes';
 
 const _SafeAreaView = styled.SafeAreaView`
-flex: 1;
-justify-content: flex-start;
+position: absolute;
+top: 500px;
+left: 0px;
+right: 0px;
 align-items: center;
 `;
 
@@ -24,36 +25,66 @@ const CREATENOTE_MUTATION = gql`
   }
 `;
 
+let croppedImgsArr:string[]=[];
+let noteDatasArr:string[][]=[];
+
 export default function CreateNote_2({navigation,route}:any) { 
   let [text,setText]= useState('악보 데이터 추출중')
   let [done, setDone] = useState<Boolean>(false)
-  const { width, height } = Dimensions.get('window');
+  const webviewRef = useRef(null); //var notes = {};
+  let {width,height}=Dimensions.get("window")
+  var imgsArray : string[]=[];
+  for (let i=0; i<route.params.imgsArray.length; i++){ // notes.base64 = route.params.data[i] // notes.id = (i + 1);
+    imgsArray.push(route.params.imgsArray[i]);
+  }
+  console.log("test");
 
-  let croppedImgArr:any;
-  let noteArr:string;
+  let croppedImgs:any;
 
   const onMessage = async (e:any)=> {  
     const { type, data } = JSON.parse(e.nativeEvent.data);
-    noteArr=data;
-    if(type ==="noteInfo"){
-      console.log("1. 계이름 인식 과정 성공 -> 2.createNote 실행, noteName==",route.params.noteName)
-      setText('악보 생성중');
-      croppedImgArr= await createCroppedArr(noteArr,imgsArray[0],height,width)     //이미 전달하는 과정에서 [0]로 세분화하고 넘겼으므로, createCroppedArr에는 img base64string이 맞음
+    //처음 시작은 당연히 0번째 이미지를 계산해야하기에 인자로 0을 삽입
+    
+    if (type === "OnOpenCVReady"){  
+      InsertImgsToWebview(0);
+    }else if(type ==="noteInfo"){
+      let noteData = JSON.parse(data)
+      let myId= noteData[3]
+      // console.log("myId:",myId,"noteData:",noteData)
+      // console.log("typeof(myId):",typeof(myId),"typeof(noteData):",typeof(noteData))
+      console.log(myId+1,"번째 페이지의 계이름 인식 과정 성공",)
+      // //데이터 축적과정
+      //image.uri : string을 보관하고 있는 array
+      croppedImgs= await createCroppedArr(data,imgsArray[myId],height,width);
+      croppedImgsArr.push(...croppedImgs);//string 반환
+      //spread 연산자 ...를 push 대상으로 하면, 최종적으로 모든 원소들이 같은 배열 내 같은 위계에 놓이게 됨.
+      noteDatasArr.push([noteData[0][0],noteData[2]]);
+      //
+      InsertImgsToWebview(myId+1);  
+    } else {  
+      console.log("ERROR in onMessage / inside HTML==",data);
+    }
+  }
+  const InsertImgsToWebview = async (id:number)=> {//마지막은 3
+    if(webviewRef.current && id<imgsArray.length){ //한 이미지에 대한 NoteData를 계산하는 과정 -> 반환값은 onMessage에서 확인가능하다
+      webviewRef.current.injectJavaScript(`ExtractNoteData("${imgsArray[id]}",${id});`);
+      setText((id+1)+'번째 악보 계산 중');
+    } else if (id>=imgsArray.length){ //모든 이미지에 대한 Data 계산이 완료한 경우
+      console.log("모든 악보의 계산이 완료되었습니다");
+      setText('계산한 악보 저장 중');
       createNote({variables:{
         title:route.params.noteName,
-        noteArray:noteArr,
-        imgArray:JSON.stringify(croppedImgArr)
+        noteArray:JSON.stringify(noteDatasArr),
+        imgArray:JSON.stringify(croppedImgsArr)
       }});
-    } else if (type === "debug"){  
-      console.log("2. inside HTMLasdf==",noteArr)
-    } else {
-      console.log("?")
+    } else{
+      console.log("Error in InsertImgsToWebview")
     }
   }
   
   const onCompleted = (data: any) => {
     const {
-      createNote: { ok },
+      createNote: { ok,id },
     } = data;
     console.log(data);
 
@@ -70,8 +101,8 @@ export default function CreateNote_2({navigation,route}:any) {
         const newNote = {
           id: createNote.id, // Assign a unique local ID or use the server-generated ID if available
           title: route.params.noteName,
-          noteArray: noteArr,
-          imgArray: croppedImgArr
+          noteArray: JSON.stringify(noteDatasArr),
+          imgArray: JSON.stringify(croppedImgsArr)
         };
         cache.modify({
           fields: {
@@ -100,24 +131,15 @@ export default function CreateNote_2({navigation,route}:any) {
     }
   });
 
-  const webviewRef = useRef(null); //var notes = {};
-  var imgsArray : string[]=[];
-
-  for (let i=0; i<route.params.imgsArray.length; i++){ // notes.base64 = route.params.data[i] // notes.id = (i + 1);
-    imgsArray.push(route.params.imgsArray[i]);
-  }
-  const source = OpenCVWeb(imgsArray);
-  const refreshSignal:Boolean = true
   const navigateHome =()=> {
-    navigation.navigate('Note',{refreshSignal});
+    navigation.navigate('Note');
   }
-  
   return ( 
     <>
       <WebView 
-        style={{opacity:0, position:'absolute'}} 
+        style={{opacity:0}} 
         ref={webviewRef} 
-        source={{html: source}} 
+        source={{html: OpenCVWeb()}} 
         onMessage={onMessage}
         domStorageEnabled={true}
       />
