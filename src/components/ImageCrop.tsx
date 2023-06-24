@@ -19,6 +19,7 @@ export const createCroppedArr= async (noteArr:string, base64:string, screenHeigh
     }
     return croppedImgs;
 }
+
 const cropImage= async (base64:string,top:number,bot:number,width:number,height:number,noteOriginH:number) =>{
     const croppedImage = await ImageManipulator.manipulateAsync(
         base64,
