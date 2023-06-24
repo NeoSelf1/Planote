@@ -6,13 +6,14 @@ export const createCroppedArr= async (noteArr:string, base64:string, screenHeigh
     let [noteOriginW,noteOriginH] = noteArray[0]  
     let lineArea = noteArray[1]  
     var croppedImgs:any[] = [];
-    let myWidth = screenWidth;
-    let myHeight = screenHeight;
+    let myWidth =screenWidth;
+    let myHeight =screenHeight;
+
     Image.getSize(base64, (width, height) => {
         myWidth=width;
         myHeight=height;
-      });
-    for (let i =0; i<lineArea.length; i++){
+    })
+    for (let i =0; i<lineArea.length; i++){//왜 처음 cropImage 호출시에만 Image.getSize 반환값 적용이 안되는가?
         let croppedImg = await cropImage(base64,lineArea[i][0],lineArea[i][1],myWidth,myHeight,noteOriginH)
         croppedImgs=[...croppedImgs,croppedImg];
     }
