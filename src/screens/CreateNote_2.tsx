@@ -37,7 +37,6 @@ export default function CreateNote_2({navigation,route}:any) {
   for (let i=0; i<route.params.imgsArray.length; i++){ // notes.base64 = route.params.data[i] // notes.id = (i + 1);
     imgsArray.push(route.params.imgsArray[i]);
   }
-  console.log("test");
 
   let croppedImgs:any;
 
