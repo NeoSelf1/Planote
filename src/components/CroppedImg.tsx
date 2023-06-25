@@ -10,7 +10,6 @@ const CroppedImg = ({uri}:any) => {
         setImageHeight(height);
         });
     }, [uri]);
-    console.log("imageHeight:",imageHeight,uri)
     return (
         <Image 
         source={{uri}}
